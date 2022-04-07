@@ -1,32 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<layout>
 
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btn_state_a"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="State A" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_state_b"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="State B" />
+            <Button
+                android:id="@+id/btn_mutable_live_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mutable Live Data" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_state"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Current State : A" />
+            <Button
+                android:id="@+id/btn_single_live_event"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Single Live event" />
 
-    <Button
-        android:id="@+id/btn_to_next_screen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Go to next screen" />
+            <Button
+                android:id="@+id/btn_state_flow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="State FLow" />
 
-</LinearLayout>
+            <Button
+                android:id="@+id/btn_shared_flow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Shared FLow" />
+
+            <Button
+                android:id="@+id/btn_flow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trigger Flow" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hello world" />
+
+            <Button
+                android:id="@+id/btn_to_next_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Go to next screen" />
+
+        </LinearLayout>
+    </ScrollView>
+</layout>

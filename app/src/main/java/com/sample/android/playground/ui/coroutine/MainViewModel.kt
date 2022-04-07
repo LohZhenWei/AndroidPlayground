@@ -1,42 +1,86 @@
 package com.sample.android.playground.ui
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.sample.android.playground.model.SingleLiveEvent
 import com.sample.android.playground.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.consumeEach
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor() : BaseViewModel() {
+class MainViewModel @Inject constructor(
+) : BaseViewModel() {
 
-    val stateFlow = MutableStateFlow("")
 
-    private val taskEventChannel = Channel<State>()
+    private val _mutableLiveData = MutableLiveData<String>()
+    val mutableLiveData: LiveData<String> = _mutableLiveData
 
-    val taskEvent = taskEventChannel.receiveAsFlow()
+    private val _singleLiveEvent = SingleLiveEvent<String>()
+    val singleLiveEvent: LiveData<String> = _singleLiveEvent
 
-    fun changeToStateA() {
+    private val _stateFlow = MutableStateFlow("")
+    val stateFlow = _stateFlow.asStateFlow()
+
+    private val _shareFlow = MutableSharedFlow<String>()
+    val shareFlow = _shareFlow.asSharedFlow()
+
+    private val _goNextScreen = MutableSharedFlow<Any?>()
+    val goNextScreen = _goNextScreen.asSharedFlow()
+
+    fun triggerMutableLiveData() {
+        _mutableLiveData.value = "Mutable Live data"
+    }
+
+    fun triggerSingleLiveEvent() {
+        _singleLiveEvent.value = "Single Live Event"
+    }
+
+    fun triggerStateFlow() {
+        _stateFlow.value = "State Flow"
+    }
+
+    fun triggerShareFlow() {
         viewModelScope.launch {
-            taskEventChannel.send(State.StateA)
+            _shareFlow.emit("Shared Flow")
         }
     }
 
-    fun changeToStateB() {
+    fun triggerGoNextScreen() {
         viewModelScope.launch {
-            taskEventChannel.send(State.StateB)
+            _goNextScreen.emit(null)
         }
     }
-}
 
-sealed class State() {
-    object StateA : State()
-    object StateB : State()
+    fun triggerFlow(): Flow<Int> {
+        return flow {
+            repeat(10) {
+                emit(it + 1)
+                delay(500L)
+            }
+        }
+    }
+
+    init {
+        collectLatest()
+    }
+
+    private fun collectLatest() {
+        viewModelScope.launch {
+            triggerFlow().collect {
+                delay(1000)
+                Timber.d("Testing collect - $it")
+            }
+        }
+        viewModelScope.launch {
+            triggerFlow().collectLatest {
+                delay(1000)
+                Timber.d("Testing collect latest - $it")
+            }
+        }
+    }
 }

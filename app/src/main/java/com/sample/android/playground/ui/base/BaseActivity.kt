@@ -14,18 +14,27 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     fun setUpNavGraph(graphId: Int) {
-        val newNavGraph = NavHostFragment.create(graphId)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.nav_container, newNavGraph)
-            .setPrimaryNavigationFragment(newNavGraph)
-            .commit()
+        val navController: NavHostFragment =
+            supportFragmentManager
+                .findFragmentById(R.id.nav_container) as NavHostFragment
+        val graph = navController.navController.navInflater.inflate(graphId)
+        navController.navController.graph = graph
+
+        /*
+         // some issue using this method to inflate graph.
+         //should inflate using xml way.
+         val newNavGraph = NavHostFragment.create(graphId)
+       supportFragmentManager.beginTransaction()
+           .replace(R.id.nav_container, newNavGraph)
+           .setPrimaryNavigationFragment(newNavGraph)
+           .commit()*/
     }
 
     override fun onBackPressed() {
         val navHostFragment =
             supportFragmentManager.primaryNavigationFragment as NavHostFragment
         val fragment =
-            navHostFragment.childFragmentManager.primaryNavigationFragment as BaseFragment<*>
+            navHostFragment.childFragmentManager.primaryNavigationFragment as BaseFragment<*, *>
         fragment.popBackStack()
     }
 }
