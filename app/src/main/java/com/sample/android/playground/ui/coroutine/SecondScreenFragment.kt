@@ -3,7 +3,6 @@ package com.sample.android.playground.ui.coroutine
 import androidx.fragment.app.viewModels
 import com.sample.android.playground.R
 import com.sample.android.playground.databinding.FragmentSecondScreenBinding
-import com.sample.android.playground.ui.MainViewModel
 import com.sample.android.playground.ui.base.BaseFragment
 
 class SecondScreenFragment : BaseFragment<FragmentSecondScreenBinding, MainViewModel>() {

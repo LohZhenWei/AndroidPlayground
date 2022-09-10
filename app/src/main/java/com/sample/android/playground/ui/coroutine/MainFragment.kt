@@ -1,5 +1,6 @@
 package com.sample.android.playground.ui.coroutine
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -8,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.sample.android.playground.R
 import com.sample.android.playground.databinding.FragmentMainBinding
 import com.sample.android.playground.extension.collectFlow
-import com.sample.android.playground.ui.MainViewModel
+import com.sample.android.playground.feature1.FeatureOneActivity
 import com.sample.android.playground.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -26,14 +27,22 @@ class MainFragment : BaseFragment<FragmentMainBinding, MainViewModel>() {
         initObserver()
     }
 
+    private val navigator = object : Navigator {
+        override fun goToNextScreen() {
+            findNavController().navigate(R.id.action_to_secondScreenFragment)
+        }
+    }
+
     private fun initListener() {
+        viewModel.navigator = navigator
+        startActivity(Intent(requireContext(), FeatureOneActivity::class.java))
         binding.apply {
             btnMutableLiveData.setOnClickListener { viewModel.triggerMutableLiveData() }
             btnSingleLiveEvent.setOnClickListener { viewModel.triggerSingleLiveEvent() }
             btnStateFlow.setOnClickListener { viewModel.triggerStateFlow() }
             btnSharedFlow.setOnClickListener { viewModel.triggerShareFlow() }
             btnFlow.setOnClickListener { triggerFlow() }
-            btnToNextScreen.setOnClickListener { viewModel.triggerGoNextScreen() }
+            btnToNextScreen.setOnClickListener { viewModel.toSecondScreen() }
         }
     }
 

@@ -1,4 +1,4 @@
-package com.sample.android.playground.ui
+package com.sample.android.playground.ui.coroutine
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -83,4 +83,18 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
+    var navigator: Navigator? = null
+
+    fun toSecondScreen() {
+        viewModelScope.launch {
+            delay(3000)
+            navigator?.goToNextScreen()
+        }
+    }
+}
+
+
+interface Navigator {
+    fun goToNextScreen()
 }
